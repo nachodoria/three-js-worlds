@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>THREE.JS PROJECTS</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@300;400&display=swap"
+    rel="stylesheet" />
+</head>
+
+<body>
+  <div id="overlay"></div>
+  <canvas id="webgl"></canvas>
+
+  <div id="hud">
+    <div id="title-strip">
+      <h1>THREE.JS<br>PROJECTS</h1>
+      <div id="scene-label">// Galaxy Generator</div>
+    </div>
+
+    <div id="switcher">
+      <button class="scene-btn active" id="btn-galaxy">
+        <span class="dot"></span> Galaxy
+      </button>
+      <button class="scene-btn" id="btn-sea">
+        <span class="dot"></span> Raging Sea
+      </button>
+      <button class="scene-btn" id="btn-portal">
+        <span class="dot"></span> Portal
+      </button>
+    </div>
+
+    <div id="hint">
+      Drag to orbit<br>Scroll to zoom
+    </div>
+  </div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+
+</html>
