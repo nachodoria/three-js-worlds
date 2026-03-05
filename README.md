@@ -1,61 +1,31 @@
-# THREE.JS WORLDS
+# 🌌 THREE.JS WORLDS
 
-An interactive WebGL showcase built with Three.js — featuring two immersive scenes you can switch between in real-time.
-
-## Scenes
-
-| Key | Scene | Description |
-|-----|-------|-------------|
-| `1` | **Galaxy Generator** | 100k particle spiral galaxy with additive blending |
-| `2` | **Raging Sea** | Animated ocean using custom GLSL Perlin noise shaders |
-
-**Controls:** Drag to orbit · Scroll to zoom
+A small **interactive WebGL showcase** built with **Three.js** featuring three procedural 3D scenes.  
+Each world demonstrates a different graphics technique such as **particles, shaders, and procedural generation**.
 
 ---
 
-## Project Structure
+## 🌍 Worlds
 
-```
-threejs-worlds/
-├── index.html                  # Entry point
-├── vite.config.js              # Vite bundler config
-├── package.json
-├── public/
-│   └── favicon.svg
-└── src/
-    ├── main.js                 # App bootstrap, scene switcher, render loop
-    ├── style.css               # Global styles & HUD
-    ├── core/
-    │   └── renderer.js         # WebGLRenderer, camera, OrbitControls
-    ├── scenes/
-    │   ├── galaxy.js           # Galaxy scene (geometry, particles, update)
-    │   └── sea.js              # Sea scene (ShaderMaterial, update)
-    └── shaders/
-        └── water/
-            ├── vertex.glsl     # Perlin noise + wave displacement
-            └── fragment.glsl   # Depth/surface color mix
-```
+| Key | World | Description |
+|----|------|-------------|
+| `1` | 🌀 **Portal** | Stylized magical portal scene with baked textures, lighting, and floating firefly particles |
+| `2` | 🌌 **Galaxy Generator** | Procedurally generated spiral galaxy using thousands of particles and additive blending |
+| `3` | 🌊 **Raging Sea** | Animated ocean using custom GLSL shaders and procedural wave displacement |
 
-## Getting Started
+---
+
+## 🎮 Controls
+
+- **Drag** → Orbit camera  
+- **Scroll** → Zoom  
+- **1 / 2 / 3** → Switch worlds  
+
+---
+
+## ⚙️ Getting Started
+
+Install dependencies
 
 ```bash
 npm install
-npm run dev
-```
-
-## Build for Production
-
-```bash
-npm run build   # outputs to dist/
-npm run preview # preview the production build
-```
-
-## Vercel Deployment
-
-This project is configured to automatically deploy to Vercel. Simply push your changes to GitHub and connect the repository to a new Vercel project. Vercel will automatically detect the Vite build settings and run `npm run build` using the provided `vercel.json` configuration file.
-
-## Tech Stack
-
-- [Three.js](https://threejs.org/) r160
-- [Vite](https://vitejs.dev/) 7 — dev server & bundler
-- Custom GLSL shaders (Perlin noise, wave displacement)
