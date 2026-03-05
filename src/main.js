@@ -4,6 +4,7 @@ import { renderer, camera, controls } from './core/renderer.js'
 import * as Galaxy from './scenes/galaxy.js'
 import * as Sea from './scenes/sea.js'
 import * as Portal from './scenes/portal.js'
+import * as Earth from './scenes/earth.js'
 
 // ─────────────────────────────────────────
 // INIT SCENES
@@ -11,11 +12,13 @@ import * as Portal from './scenes/portal.js'
 Galaxy.generate()
 Sea.generate()
 Portal.generate()
+Earth.generate()
 
 // ─────────────────────────────────────────
 // SCENE REGISTRY
 // ─────────────────────────────────────────
 const btnGalaxy = document.getElementById('btn-galaxy')
+const btnEarth = document.getElementById('btn-earth')
 const btnSea = document.getElementById('btn-sea')
 const btnPortal = document.getElementById('btn-portal')
 const overlay = document.getElementById('overlay')
@@ -32,6 +35,17 @@ const SCENES = {
     clearColor: null,            // use default dark bg
     toneMapping: THREE.NoToneMapping,
     update: Galaxy.update,
+  },
+  earth: {
+    label: '// Digital Earth',
+    btn: btnEarth,
+    scene: Earth.scene,
+    gui: Earth.gui,
+    camPos: new THREE.Vector3(6, 2, 3),
+    controlsConfig: { maxPolarAngle: Math.PI, minPolarAngle: 0, enablePan: false },
+    clearColor: '#000011',
+    toneMapping: THREE.NoToneMapping,
+    update: Earth.update,
   },
   sea: {
     label: '// Raging Sea',
@@ -109,13 +123,15 @@ function switchTo(key) {
 }
 
 btnGalaxy.addEventListener('click', () => switchTo('galaxy'))
+btnEarth.addEventListener('click', () => switchTo('earth'))
 btnSea.addEventListener('click', () => switchTo('sea'))
 btnPortal.addEventListener('click', () => switchTo('portal'))
 
 window.addEventListener('keydown', (e) => {
   if (e.key === '1') switchTo('galaxy')
-  if (e.key === '2') switchTo('sea')
-  if (e.key === '3') switchTo('portal')
+  if (e.key === '2') switchTo('earth')
+  if (e.key === '3') switchTo('sea')
+  if (e.key === '4') switchTo('portal')
 })
 
 // ─────────────────────────────────────────
