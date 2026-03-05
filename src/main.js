@@ -27,9 +27,10 @@ const SCENES = {
     btn: btnGalaxy,
     scene: Galaxy.scene,
     gui: Galaxy.gui,
-    camPos: new THREE.Vector3(3, 3, 3),
+    camPos: new THREE.Vector3(5, 2, 5),
     controlsConfig: { maxPolarAngle: Math.PI, minPolarAngle: 0, enablePan: false },
     clearColor: null,            // use default dark bg
+    toneMapping: THREE.NoToneMapping,
     update: Galaxy.update,
   },
   sea: {
@@ -37,9 +38,10 @@ const SCENES = {
     btn: btnSea,
     scene: Sea.scene,
     gui: Sea.gui,
-    camPos: new THREE.Vector3(1, 1, 1),
+    camPos: new THREE.Vector3(2.5, 0.8, 2.5),
     controlsConfig: { maxPolarAngle: Math.PI / 2 - 0.2, minPolarAngle: 0.1, enablePan: false },
     clearColor: null,
+    toneMapping: THREE.ACESFilmicToneMapping,
     update: Sea.update,
   },
   portal: {
@@ -50,6 +52,7 @@ const SCENES = {
     camPos: new THREE.Vector3(-3, 2.5, -3),
     controlsConfig: { maxPolarAngle: Math.PI / 2 - 0.2, minPolarAngle: 0.1, enablePan: false },
     clearColor: Portal.clearColor,
+    toneMapping: THREE.NoToneMapping,
     update: Portal.update,
   },
 }
@@ -82,8 +85,16 @@ function switchTo(key) {
     controls.minPolarAngle = cfg.controlsConfig.minPolarAngle
     controls.update()
 
-    // Set scene-specific clear color
+    // Set scene-specific clear color and tone mapping
     renderer.setClearColor(cfg.clearColor || DEFAULT_CLEAR)
+    if (renderer.toneMapping !== cfg.toneMapping) {
+      renderer.toneMapping = cfg.toneMapping
+      cfg.scene.traverse((child) => {
+        if (child.material) {
+          child.material.needsUpdate = true
+        }
+      })
+    }
 
     // Update button states
     Object.values(SCENES).forEach((c) => c.btn.classList.remove('active'))
