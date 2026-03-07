@@ -5,6 +5,7 @@ import * as Galaxy from './scenes/galaxy.js'
 import * as Sea from './scenes/sea.js'
 import * as Portal from './scenes/portal.js'
 import * as Earth from './scenes/earth.js'
+import * as Boat from './scenes/boat.js'
 
 // ─────────────────────────────────────────
 // INIT SCENES
@@ -13,6 +14,7 @@ Galaxy.generate()
 Sea.generate()
 Portal.generate()
 Earth.generate()
+Boat.generate()
 
 // ─────────────────────────────────────────
 // SCENE REGISTRY
@@ -21,6 +23,7 @@ const btnGalaxy = document.getElementById('btn-galaxy')
 const btnEarth = document.getElementById('btn-earth')
 const btnSea = document.getElementById('btn-sea')
 const btnPortal = document.getElementById('btn-portal')
+const btnBoat = document.getElementById('btn-boat')
 const overlay = document.getElementById('overlay')
 const sceneLabel = document.getElementById('scene-label')
 
@@ -69,6 +72,17 @@ const SCENES = {
     toneMapping: THREE.NoToneMapping,
     update: Portal.update,
   },
+  boat: {
+    label: '// GPGPU Boat',
+    btn: btnBoat,
+    scene: Boat.scene,
+    gui: Boat.gui,
+    camPos: new THREE.Vector3(4.5, 4, 11),
+    controlsConfig: { maxPolarAngle: Math.PI / 2 - 0.2, minPolarAngle: 0.1, enablePan: false },
+    clearColor: Boat.clearColor,
+    toneMapping: THREE.NoToneMapping,
+    update: Boat.update,
+  },
 }
 
 const DEFAULT_CLEAR = '#04040a'
@@ -103,6 +117,7 @@ function switchTo(key) {
     renderer.setClearColor(cfg.clearColor || DEFAULT_CLEAR)
     if (renderer.toneMapping !== cfg.toneMapping) {
       renderer.toneMapping = cfg.toneMapping
+renderer.toneMappingExposure = 1
       cfg.scene.traverse((child) => {
         if (child.material) {
           child.material.needsUpdate = true
@@ -126,12 +141,14 @@ btnGalaxy.addEventListener('click', () => switchTo('galaxy'))
 btnEarth.addEventListener('click', () => switchTo('earth'))
 btnSea.addEventListener('click', () => switchTo('sea'))
 btnPortal.addEventListener('click', () => switchTo('portal'))
+btnBoat.addEventListener('click', () => switchTo('boat'))
 
 window.addEventListener('keydown', (e) => {
   if (e.key === '1') switchTo('galaxy')
   if (e.key === '2') switchTo('earth')
   if (e.key === '3') switchTo('sea')
   if (e.key === '4') switchTo('portal')
+  if (e.key === '5') switchTo('boat')
 })
 
 // ─────────────────────────────────────────

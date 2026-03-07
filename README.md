@@ -13,6 +13,7 @@ Each world demonstrates a different graphics technique such as **particles, shad
 | `2` | 🌍 **Digital Earth** | High-fidelity planet Earth with day/night cycles, specular clouds, and an atmospheric glow powered by custom GLSL shaders |
 | `3` | 🌊 **Raging Sea** | Animated ocean using custom GLSL shaders and procedural wave displacement |
 | `4` | 🌀 **Portal** | Stylized magical portal scene with baked textures, lighting, and floating firefly particles |
+| `5` | ⛵ **GPGPU Boat** | Simulation of thousands of particles following a flow field to recreate a boat model |
 
 ---
 
@@ -20,7 +21,7 @@ Each world demonstrates a different graphics technique such as **particles, shad
 
 - **Drag** → Orbit camera  
 - **Scroll** → Zoom  
-- **1 / 2 / 3 / 4** → Switch worlds  
+- **1 / 2 / 3 / 4 / 5** → Switch worlds  
 
 ---
 

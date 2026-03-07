@@ -40,7 +40,7 @@ debugObject.firefliesColor = '#fdd635'
 const textureLoader = new THREE.TextureLoader()
 
 const dracoLoader = new DRACOLoader()
-dracoLoader.setDecoderPath('draco/')
+dracoLoader.setDecoderPath('draco/portal/')
 
 const gltfLoader = new GLTFLoader()
 gltfLoader.setDRACOLoader(dracoLoader)
