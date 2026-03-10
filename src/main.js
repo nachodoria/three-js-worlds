@@ -6,6 +6,7 @@ import * as Sea from './scenes/sea.js'
 import * as Portal from './scenes/portal.js'
 import * as Earth from './scenes/earth.js'
 import * as Boat from './scenes/boat.js'
+import * as Terrain from './scenes/terrain.js'
 
 // ─────────────────────────────────────────
 // INIT SCENES
@@ -15,6 +16,7 @@ Sea.generate()
 Portal.generate()
 Earth.generate()
 Boat.generate()
+Terrain.generate()
 
 // ─────────────────────────────────────────
 // SCENE REGISTRY
@@ -24,8 +26,13 @@ const btnEarth = document.getElementById('btn-earth')
 const btnSea = document.getElementById('btn-sea')
 const btnPortal = document.getElementById('btn-portal')
 const btnBoat = document.getElementById('btn-boat')
+const btnTerrain = document.getElementById('btn-terrain')
 const overlay = document.getElementById('overlay')
 const sceneLabel = document.getElementById('scene-label')
+
+const DEFAULT_CLEAR = '#04040a'
+const DEFAULT_CAMERA_FOV = 75
+const DEFAULT_TARGET = new THREE.Vector3(0, 0, 0)
 
 const SCENES = {
   galaxy: {
@@ -83,15 +90,63 @@ const SCENES = {
     toneMapping: THREE.NoToneMapping,
     update: Boat.update,
   },
+  terrain: {
+    label: '// Procedural Terrain',
+    btn: btnTerrain,
+    scene: Terrain.scene,
+    gui: Terrain.gui,
+    camPos: new THREE.Vector3(-10, 6, -2),
+    camTarget: new THREE.Vector3(0, 0.6, 0),
+    cameraFov: 35,
+    controlsConfig: {
+      maxPolarAngle: Math.PI / 2 - 0.05,
+      minPolarAngle: 0.15,
+      enablePan: false,
+      minDistance: 5,
+      maxDistance: 18,
+    },
+    clearColor: Terrain.clearColor,
+    toneMapping: THREE.ACESFilmicToneMapping,
+    update: Terrain.update,
+  },
 }
-
-const DEFAULT_CLEAR = '#04040a'
 
 let currentKey = 'galaxy'
 let activeScene = SCENES.galaxy.scene
 
-// Show galaxy GUI on initial load
-Galaxy.gui.show()
+function applySceneConfig(cfg) {
+  sceneLabel.textContent = cfg.label
+  camera.position.copy(cfg.camPos)
+  camera.fov = cfg.cameraFov ?? DEFAULT_CAMERA_FOV
+  camera.updateProjectionMatrix()
+  controls.target.copy(cfg.camTarget ?? DEFAULT_TARGET)
+  camera.lookAt(controls.target)
+  controls.maxPolarAngle = cfg.controlsConfig.maxPolarAngle
+  controls.minPolarAngle = cfg.controlsConfig.minPolarAngle
+  controls.enablePan = cfg.controlsConfig.enablePan ?? false
+  controls.minDistance = cfg.controlsConfig.minDistance ?? 0
+  controls.maxDistance = cfg.controlsConfig.maxDistance ?? Infinity
+  controls.update()
+
+  renderer.setClearColor(cfg.clearColor || DEFAULT_CLEAR)
+  if (renderer.toneMapping !== cfg.toneMapping) {
+    renderer.toneMapping = cfg.toneMapping
+    renderer.toneMappingExposure = 1
+    cfg.scene.traverse((child) => {
+      if (child.material) {
+        child.material.needsUpdate = true
+      }
+    })
+  }
+
+  Object.values(SCENES).forEach((c) => c.btn.classList.remove('active'))
+  cfg.btn.classList.add('active')
+
+  Object.values(SCENES).forEach((c) => c.gui.hide())
+  cfg.gui.show()
+}
+
+applySceneConfig(SCENES[currentKey])
 
 // ─────────────────────────────────────────
 // SCENE SWITCHING
@@ -105,34 +160,7 @@ function switchTo(key) {
 
   setTimeout(() => {
     activeScene = cfg.scene
-    sceneLabel.textContent = cfg.label
-    camera.position.copy(cfg.camPos)
-    controls.target.set(0, 0, 0)
-    camera.lookAt(0, 0, 0)
-    controls.maxPolarAngle = cfg.controlsConfig.maxPolarAngle
-    controls.minPolarAngle = cfg.controlsConfig.minPolarAngle
-    controls.update()
-
-    // Set scene-specific clear color and tone mapping
-    renderer.setClearColor(cfg.clearColor || DEFAULT_CLEAR)
-    if (renderer.toneMapping !== cfg.toneMapping) {
-      renderer.toneMapping = cfg.toneMapping
-renderer.toneMappingExposure = 1
-      cfg.scene.traverse((child) => {
-        if (child.material) {
-          child.material.needsUpdate = true
-        }
-      })
-    }
-
-    // Update button states
-    Object.values(SCENES).forEach((c) => c.btn.classList.remove('active'))
-    cfg.btn.classList.add('active')
-
-    // Hide all GUIs, then show the active scene's GUI
-    Object.values(SCENES).forEach((c) => c.gui.hide())
-    cfg.gui.show()
-
+    applySceneConfig(cfg)
     overlay.classList.remove('flash')
   }, 450)
 }
@@ -142,6 +170,7 @@ btnEarth.addEventListener('click', () => switchTo('earth'))
 btnSea.addEventListener('click', () => switchTo('sea'))
 btnPortal.addEventListener('click', () => switchTo('portal'))
 btnBoat.addEventListener('click', () => switchTo('boat'))
+btnTerrain.addEventListener('click', () => switchTo('terrain'))
 
 window.addEventListener('keydown', (e) => {
   if (e.key === '1') switchTo('galaxy')
@@ -149,6 +178,7 @@ window.addEventListener('keydown', (e) => {
   if (e.key === '3') switchTo('sea')
   if (e.key === '4') switchTo('portal')
   if (e.key === '5') switchTo('boat')
+  if (e.key === '6') switchTo('terrain')
 })
 
 // ─────────────────────────────────────────

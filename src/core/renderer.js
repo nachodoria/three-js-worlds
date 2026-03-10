@@ -6,6 +6,8 @@ const canvas = document.getElementById('webgl')
 export const renderer = new THREE.WebGLRenderer({ canvas, antialias: true })
 renderer.setPixelRatio(Math.min(devicePixelRatio, 2))
 renderer.setSize(innerWidth, innerHeight)
+renderer.shadowMap.enabled = true
+renderer.shadowMap.type = THREE.PCFSoftShadowMap
 
 export const camera = new THREE.PerspectiveCamera(75, innerWidth / innerHeight, 0.1, 100)
 camera.position.set(3, 3, 3)
